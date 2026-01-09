@@ -10,12 +10,13 @@ class BreadApp extends StatelessWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       routerConfig: routerConfig,
+      themeMode: ThemeMode.light,
       theme: ThemeData(
-        primaryColor: const Color(0xFFFF8C00),
-        scaffoldBackgroundColor: const Color(0xFFFFF8F0),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFFFF8C00),
-          primary: const Color(0xFFFF8C00),
+        scaffoldBackgroundColor: const Color(0xffF9FAFB),
+        colorScheme: const ColorScheme.light(
+          primary: Color(0xff101828),
+          secondary: Color(0xfff54900), // overscroll
+          surface: Color(0xffF9FAFB), // bg color when push
         ),
       ),
     );

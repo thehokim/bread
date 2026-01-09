@@ -16,8 +16,8 @@ final routerConfig = GoRouter(
       builder: (context, state) => const OnboardingScreen(),
     ),
     GoRoute(
-      path: MainScreen.routePath,
-      builder: (context, state) => const MainScreen(),
+      path: HomeScreen.routePath,
+      builder: (context, state) => const HomeScreen(),
     ),
   ],
 );

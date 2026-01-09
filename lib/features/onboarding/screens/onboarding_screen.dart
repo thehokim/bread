@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../core/widgets/main_button.dart';
+import '../../home/screens/home_screen.dart';
+import '../data/onboard_repository.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -21,7 +27,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         curve: Curves.easeInOut,
       );
     } else {
-      // context.read<AuthProvider>().completeOnboarding();
+      context.read<OnboardRepository>().removeOnboard();
+      context.replace(HomeScreen.routePath);
     }
   }
 
@@ -200,6 +207,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
             const SizedBox(height: 20),
+            MainButton(
+              title: 'Далее',
+              onPressed: _index == 2 && !_accepted ? null : _next,
+            ),
             SizedBox(
               width: double.infinity,
               height: 56,

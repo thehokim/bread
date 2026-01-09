@@ -4,20 +4,21 @@ import '../../order/screens/orders_screen.dart';
 import '../../order/screens/promotions_screen.dart';
 import 'profile_screen.dart';
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
-  static const routePath = '/MainScreen';
+  static const routePath = '/HomeScreen';
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = const [
     OrdersScreen(),
+    Text('Заказы'),
     PromotionsScreen(),
     ProfileScreen(),
   ];
