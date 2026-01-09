@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-import '../providers/auth_provider.dart';
 
 class OTPVerificationScreen extends StatefulWidget {
   final String phoneNumber;
@@ -16,7 +14,8 @@ class OTPVerificationScreen extends StatefulWidget {
 }
 
 class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
-  final List<TextEditingController> _controllers = List.generate(4, (_) => TextEditingController());
+  final List<TextEditingController> _controllers =
+      List.generate(4, (_) => TextEditingController());
   final List<FocusNode> _focusNodes = List.generate(4, (_) => FocusNode());
   bool _isLoading = false;
 
@@ -39,13 +38,13 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
     setState(() => _isLoading = true);
 
     try {
-      final success = await context.read<AuthProvider>().verifyOTP(_otp);
-      
-      if (!success && mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Неверный код')),
-        );
-      }
+      // final success = await context.read<AuthProvider>().verifyOTP(_otp);
+
+      // if (!success && mounted) {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     const SnackBar(content: Text('Неверный код')),
+      //   );
+      // }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -63,14 +62,15 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
     if (value.isNotEmpty && index < 3) {
       _focusNodes[index + 1].requestFocus();
     }
-    
+
     if (_otp.length == 4) {
       _verifyOTP();
     }
   }
 
   void _onKeyEvent(KeyEvent event, int index) {
-    if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.backspace) {
+    if (event is KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.backspace) {
       if (_controllers[index].text.isEmpty && index > 0) {
         _focusNodes[index - 1].requestFocus();
       }
@@ -117,7 +117,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
                 ),
               ),
               const SizedBox(height: 32),
-              
+
               // Title
               const Text(
                 'doim.uz',
@@ -136,7 +136,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
                 ),
               ),
               const SizedBox(height: 64),
-              
+
               // Instructions
               Column(
                 children: [
@@ -159,7 +159,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
                 ],
               ),
               const SizedBox(height: 48),
-              
+
               // OTP Input
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -200,7 +200,9 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
                             ),
                           ),
                         ),
-                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
                         onChanged: (value) => _onChanged(value, index),
                       ),
                     ),
@@ -208,13 +210,14 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
                 }),
               ),
               const SizedBox(height: 32),
-              
+
               // Verify Button
               SizedBox(
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
-                  onPressed: (_isLoading || _otp.length < 4) ? null : _verifyOTP,
+                  onPressed:
+                      (_isLoading || _otp.length < 4) ? null : _verifyOTP,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFFF8C00),
                     shape: RoundedRectangleBorder(
@@ -242,7 +245,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
                 ),
               ),
               const SizedBox(height: 16),
-              
+
               // Resend
               TextButton(
                 onPressed: () {

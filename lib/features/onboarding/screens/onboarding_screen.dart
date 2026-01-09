@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../../auth/providers/auth_provider.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
+
+  static const routePath = '/OnboardingScreen';
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -21,7 +21,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         curve: Curves.easeInOut,
       );
     } else {
-      context.read<AuthProvider>().completeOnboarding();
+      // context.read<AuthProvider>().completeOnboarding();
     }
   }
 

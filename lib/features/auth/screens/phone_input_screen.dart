@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-import '../providers/auth_provider.dart';
-import 'otp_verification_screen.dart';
 
 class PhoneInputScreen extends StatefulWidget {
   const PhoneInputScreen({super.key});
@@ -12,7 +9,8 @@ class PhoneInputScreen extends StatefulWidget {
 }
 
 class _PhoneInputScreenState extends State<PhoneInputScreen> {
-  final TextEditingController _phoneController = TextEditingController(text: '+998 90 123 45 67');
+  final TextEditingController _phoneController =
+      TextEditingController(text: '+998 90 123 45 67');
   bool _isLoading = false;
 
   @override
@@ -23,7 +21,7 @@ class _PhoneInputScreenState extends State<PhoneInputScreen> {
 
   Future<void> _sendOTP() async {
     final phone = _phoneController.text.replaceAll(RegExp(r'[^\d]'), '');
-    
+
     if (phone.length < 12) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Введите корректный номер телефона')),
@@ -34,15 +32,15 @@ class _PhoneInputScreenState extends State<PhoneInputScreen> {
     setState(() => _isLoading = true);
 
     try {
-      final success = await context.read<AuthProvider>().sendOTP(phone);
-      
-      if (success && mounted) {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => OTPVerificationScreen(phoneNumber: phone),
-          ),
-        );
-      }
+      // final success = await context.read<AuthProvider>().sendOTP(phone);
+
+      // if (success && mounted) {
+      //   Navigator.of(context).push(
+      //     MaterialPageRoute(
+      //       builder: (context) => OTPVerificationScreen(phoneNumber: phone),
+      //     ),
+      //   );
+      // }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -89,7 +87,7 @@ class _PhoneInputScreenState extends State<PhoneInputScreen> {
                 ),
               ),
               const SizedBox(height: 32),
-              
+
               // App Name
               const Text(
                 'doim.uz',
@@ -108,7 +106,7 @@ class _PhoneInputScreenState extends State<PhoneInputScreen> {
                 ),
               ),
               const SizedBox(height: 64),
-              
+
               // Phone Input
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -153,7 +151,7 @@ class _PhoneInputScreenState extends State<PhoneInputScreen> {
                 ],
               ),
               const SizedBox(height: 32),
-              
+
               // Send Button
               SizedBox(
                 width: double.infinity,
@@ -201,14 +199,14 @@ class _PhoneNumberFormatter extends TextInputFormatter {
     TextEditingValue newValue,
   ) {
     final text = newValue.text;
-    
+
     if (text.isEmpty) {
       return newValue;
     }
 
     final buffer = StringBuffer();
     buffer.write('+');
-    
+
     for (int i = 0; i < text.length; i++) {
       buffer.write(text[i]);
       if (i == 2 || i == 4 || i == 7 || i == 9) {
