@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'home_screen.dart';
 import '../../order/screens/orders_screen.dart';
 import '../../order/screens/promotions_screen.dart';
 import 'profile_screen.dart';
@@ -15,7 +14,6 @@ class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    const HomeScreen(),
     const OrdersScreen(),
     const PromotionsScreen(),
     const ProfileScreen(),
