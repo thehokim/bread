@@ -3,9 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/constants.dart';
+import '../../../core/widgets/text_gradient.dart';
 import '../../home/screens/home_screen.dart';
-import '../../onboarding/data/onboard_repository.dart';
-import '../../onboarding/screens/onboarding_screen.dart';
+import '../../onboard/data/onboard_repository.dart';
+import '../../onboard/screens/onboard_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -15,14 +16,6 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  void replace() {
-    if (context.read<OnboardRepository>().isOnboard()) {
-      context.replace(OnboardingScreen.routePath);
-    } else {
-      context.replace(HomeScreen.routePath);
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -30,7 +23,11 @@ class _SplashScreenState extends State<SplashScreen> {
       const Duration(seconds: 2),
       () {
         if (mounted) {
-          replace();
+          if (context.read<OnboardRepository>().isOnboard()) {
+            context.replace(OnboardScreen.routePath);
+          } else {
+            context.replace(HomeScreen.routePath);
+          }
         }
       },
     );
@@ -96,30 +93,6 @@ class _SplashScreenState extends State<SplashScreen> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class GradientText extends StatelessWidget {
-  const GradientText(
-    this.text, {
-    super.key,
-    required this.gradient,
-    this.style,
-  });
-
-  final String text;
-  final TextStyle? style;
-  final Gradient gradient;
-
-  @override
-  Widget build(BuildContext context) {
-    return ShaderMask(
-      blendMode: BlendMode.srcIn,
-      shaderCallback: (bounds) => gradient.createShader(
-        Rect.fromLTWH(0, 0, bounds.width, bounds.height),
-      ),
-      child: Text(text, style: style),
     );
   }
 }

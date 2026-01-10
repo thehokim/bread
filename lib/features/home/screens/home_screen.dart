@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../order/screens/orders_screen.dart';
 import '../../order/screens/promotions_screen.dart';
-import 'profile_screen.dart';
+import '../../profile/screens/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

@@ -103,7 +103,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
                   borderRadius: BorderRadius.circular(32),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFFFF8C00).withOpacity(0.3),
+                      color: const Color(0xFFFF8C00).withValues(alpha: 0.3),
                       blurRadius: 20,
                       offset: const Offset(0, 10),
                     ),

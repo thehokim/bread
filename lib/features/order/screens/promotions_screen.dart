@@ -63,17 +63,17 @@ class PromotionsScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                      Text(
                         'Ваш прогресс',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 14,
                         ),
                       ),
-                      const Text(
+                      Text(
                         '1 / 10 заказов',
                         style: TextStyle(
                           color: Colors.white,
@@ -90,7 +90,8 @@ class PromotionsScreen extends StatelessWidget {
                       value: 0.1,
                       minHeight: 8,
                       backgroundColor: Colors.white.withOpacity(0.3),
-                      valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+                      valueColor:
+                          const AlwaysStoppedAnimation<Color>(Colors.white),
                     ),
                   ),
                 ],

@@ -1,0 +1,17 @@
+{
+    "@@locale": "en",
+    "onbTitle1": "Aaa",
+    "@onbTitle1": {},
+    "onbTitle2": "Bbb",
+    "@onbTitle2": {},
+    "onbTitle3": "Ccc",
+    "@onbTitle3": {},
+    "onbSubtitle1": "Aaa aaa",
+    "@onbSubtitle1": {},
+    "onbSubtitle2": "Bbb bbb",
+    "@onbSubtitle2": {},
+    "onbSubtitle3": "Ccc ccc",
+    "@onbSubtitle3": {},
+    "continue1": "Davim etish",
+    "@continue1": {}
+}

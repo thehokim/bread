@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+
 import '../models/address.dart';
-import '../providers/cart_provider.dart';
-import '../providers/order_provider.dart';
 
 class OrderCheckoutScreen extends StatefulWidget {
   const OrderCheckoutScreen({super.key});
@@ -17,7 +15,7 @@ class _OrderCheckoutScreenState extends State<OrderCheckoutScreen> {
   DateTime? _selectedTime;
   final TextEditingController _commentController = TextEditingController();
   bool _isLoading = false;
-  bool _hasOrderedToday = false;
+  final bool _hasOrderedToday = false;
 
   final List<DateTime> _availableTimes = [
     DateTime(2024, 1, 1, 7, 0),
@@ -37,15 +35,15 @@ class _OrderCheckoutScreenState extends State<OrderCheckoutScreen> {
       _selectedAddress = addresses.first;
     }
     _selectedTime = _availableTimes.first;
-    
+
     // Check if user already ordered today
     final now = DateTime.now();
-    final orders = context.read<OrderProvider>().orders;
-    _hasOrderedToday = orders.any((order) {
-      return order.createdAt.year == now.year &&
-             order.createdAt.month == now.month &&
-             order.createdAt.day == now.day;
-    });
+    // final orders = context.read<OrderProvider>().orders;
+    // _hasOrderedToday = orders.any((order) {
+    //   return order.createdAt.year == now.year &&
+    //          order.createdAt.month == now.month &&
+    //          order.createdAt.day == now.day;
+    // });
   }
 
   @override
@@ -56,17 +54,18 @@ class _OrderCheckoutScreenState extends State<OrderCheckoutScreen> {
 
   Future<void> _placeOrder() async {
     if (_selectedAddress == null || _selectedTime == null) return;
-    
+
     if (_hasOrderedToday) {
-      _showErrorDialog('Вы уже сделали заказ сегодня. Можно заказать только 1 раз в день.');
+      _showErrorDialog(
+          'Вы уже сделали заказ сегодня. Можно заказать только 1 раз в день.');
       return;
     }
 
     setState(() => _isLoading = true);
 
     try {
-      final cart = context.read<CartProvider>();
-      final orderProvider = context.read<OrderProvider>();
+      // final cart = context.read<CartProvider>();
+      // final orderProvider = context.read<OrderProvider>();
 
       final now = DateTime.now();
       final deliveryTime = DateTime(
@@ -77,15 +76,15 @@ class _OrderCheckoutScreenState extends State<OrderCheckoutScreen> {
         _selectedTime!.minute,
       );
 
-      await orderProvider.createOrder(
-        items: cart.items.values.toList(),
-        address: _selectedAddress!,
-        deliveryTime: deliveryTime,
-        total: cart.totalAmount,
-        comment: _commentController.text.isEmpty ? null : _commentController.text,
-      );
+      // await orderProvider.createOrder(
+      //   items: cart.items.values.toList(),
+      //   address: _selectedAddress!,
+      //   deliveryTime: deliveryTime,
+      //   total: cart.totalAmount,
+      //   comment: _commentController.text.isEmpty ? null : _commentController.text,
+      // );
 
-      cart.clear();
+      // cart.clear();
 
       if (mounted) {
         Navigator.of(context).popUntil((route) => route.isFirst);
@@ -118,7 +117,11 @@ class _OrderCheckoutScreenState extends State<OrderCheckoutScreen> {
           padding: const EdgeInsets.all(16),
           child: Row(
             children: [
-              const Icon(Icons.warning_amber_rounded, color: Color(0xFFFF8C00), size: 32),
+              const Icon(
+                Icons.warning_amber_rounded,
+                color: Color(0xFFFF8C00),
+                size: 32,
+              ),
               const SizedBox(width: 16),
               Expanded(
                 child: Text(
@@ -197,262 +200,260 @@ class _OrderCheckoutScreenState extends State<OrderCheckoutScreen> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Consumer<CartProvider>(
-        builder: (context, cart, _) {
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Address Section
-                _SectionCard(
-                  icon: Icons.location_on,
-                  iconColor: const Color(0xFFFF8C00),
-                  title: 'Адрес доставки',
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      InkWell(
-                        onTap: _showAddressSelector,
-                        child: Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFFFF8F0),
-                            borderRadius: BorderRadius.circular(12),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Address Section
+            _SectionCard(
+              icon: Icons.location_on,
+              iconColor: const Color(0xFFFF8C00),
+              title: 'Адрес доставки',
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  InkWell(
+                    onTap: _showAddressSelector,
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFF8F0),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            _selectedAddress?.isHome == true
+                                ? Icons.home
+                                : Icons.location_on,
+                            color: const Color(0xFFFF8C00),
                           ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                _selectedAddress?.isHome == true
-                                    ? Icons.home
-                                    : Icons.location_on,
-                                color: const Color(0xFFFF8C00),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      _selectedAddress?.name ?? 'Выберите адрес',
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16,
-                                      ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _selectedAddress?.name ?? 'Выберите адрес',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                if (_selectedAddress != null)
+                                  Text(
+                                    _selectedAddress!.details ?? '',
+                                    style: TextStyle(
+                                      color: Colors.grey.shade600,
+                                      fontSize: 14,
                                     ),
-                                    if (_selectedAddress != null)
-                                      Text(
-                                        _selectedAddress!.details ?? '',
-                                        style: TextStyle(
-                                          color: Colors.grey.shade600,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              ),
-                              const Icon(Icons.arrow_drop_down),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Time Section
-                _SectionCard(
-                  icon: Icons.access_time,
-                  iconColor: const Color(0xFFFF8C00),
-                  title: 'Время доставки',
-                  subtitle: '07:00 - 10:00',
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: _availableTimes.map((time) {
-                            final isSelected = _selectedTime?.hour == time.hour &&
-                                _selectedTime?.minute == time.minute;
-                            return _TimeSlot(
-                              time: time,
-                              isSelected: isSelected,
-                              onTap: () => setState(() => _selectedTime = time),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFFFF3E0),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.info_outline, color: Color(0xFFFF8C00), size: 20),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                'Выберите удобное время: ${DateFormat('HH:mm').format(_selectedTime ?? _availableTimes.first)}',
-                                style: const TextStyle(
-                                  color: Color(0xFFFF8C00),
-                                  fontSize: 14,
-                                ),
-                              ),
+                                  ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                          const Icon(Icons.arrow_drop_down),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Comment Section
-                _SectionCard(
-                  icon: Icons.comment,
-                  iconColor: Colors.grey,
-                  title: 'Комментарий к заказу',
-                  child: TextField(
-                    controller: _commentController,
-                    maxLines: 3,
-                    decoration: InputDecoration(
-                      hintText: 'Подъезд, этаж, ориентир...',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFFFF8C00)),
-                      ),
-                      filled: true,
-                      fillColor: const Color(0xFFFFF8F0),
                     ),
                   ),
-                ),
-                const SizedBox(height: 24),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
 
-                // Order Summary
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: const Color(0xFFFFE8CC)),
+            // Time Section
+            _SectionCard(
+              icon: Icons.access_time,
+              iconColor: const Color(0xFFFF8C00),
+              title: 'Время доставки',
+              subtitle: '07:00 - 10:00',
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: _availableTimes.map((time) {
+                        final isSelected = _selectedTime?.hour == time.hour &&
+                            _selectedTime?.minute == time.minute;
+                        return _TimeSlot(
+                          time: time,
+                          isSelected: isSelected,
+                          onTap: () => setState(() => _selectedTime = time),
+                        );
+                      }).toList(),
+                    ),
                   ),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Количество:',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          Text(
-                            '${cart.totalQuantity} шт',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Divider(height: 32),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Цена:',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            '${NumberFormat('#,###').format(cart.totalAmount)} сум',
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFFFF8C00),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Warning if already ordered
-                if (_hasOrderedToday)
+                  const SizedBox(height: 12),
                   Container(
-                    padding: const EdgeInsets.all(16),
-                    margin: const EdgeInsets.only(bottom: 16),
+                    padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: const Color(0xFFFFF3E0),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: const Color(0xFFFF8C00)),
                     ),
-                    child: const Row(
+                    child: Row(
                       children: [
-                        Icon(Icons.warning_amber_rounded, color: Color(0xFFFF8C00)),
-                        SizedBox(width: 12),
+                        const Icon(Icons.info_outline,
+                            color: Color(0xFFFF8C00), size: 20),
+                        const SizedBox(width: 8),
                         Expanded(
                           child: Text(
-                            'Вы уже сделали заказ сегодня. Можно заказывать только 1 раз в день.',
-                            style: TextStyle(color: Color(0xFFFF8C00)),
+                            'Выберите удобное время: ${DateFormat('HH:mm').format(_selectedTime ?? _availableTimes.first)}',
+                            style: const TextStyle(
+                              color: Color(0xFFFF8C00),
+                              fontSize: 14,
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
-
-                // Place Order Button
-                SizedBox(
-                  width: double.infinity,
-                  height: 56,
-                  child: ElevatedButton(
-                    onPressed: (_isLoading || _hasOrderedToday) ? null : _placeOrder,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFF8C00),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      disabledBackgroundColor: Colors.grey.shade300,
-                    ),
-                    child: _isLoading
-                        ? const SizedBox(
-                            height: 24,
-                            width: 24,
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 2,
-                            ),
-                          )
-                        : const Text(
-                            'Оформить заказ',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                            ),
-                          ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          );
-        },
+            const SizedBox(height: 16),
+
+            // Comment Section
+            _SectionCard(
+              icon: Icons.comment,
+              iconColor: Colors.grey,
+              title: 'Комментарий к заказу',
+              child: TextField(
+                controller: _commentController,
+                maxLines: 3,
+                decoration: InputDecoration(
+                  hintText: 'Подъезд, этаж, ориентир...',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.grey.shade300),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.grey.shade300),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFFFF8C00)),
+                  ),
+                  filled: true,
+                  fillColor: const Color(0xFFFFF8F0),
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+
+            // Order Summary
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: const Color(0xFFFFE8CC)),
+              ),
+              child: const Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Количество:',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      // Text(
+                      //   '${cart.totalQuantity} шт',
+                      //   style: const TextStyle(
+                      //     fontSize: 16,
+                      //     fontWeight: FontWeight.w600,
+                      //   ),
+                      // ),
+                    ],
+                  ),
+                  Divider(height: 32),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Цена:',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      // Text(
+                      //   '${NumberFormat('#,###').format(cart.totalAmount)} сум',
+                      //   style: const TextStyle(
+                      //     fontSize: 20,
+                      //     fontWeight: FontWeight.bold,
+                      //     color: Color(0xFFFF8C00),
+                      //   ),
+                      // ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // Warning if already ordered
+            if (_hasOrderedToday)
+              Container(
+                padding: const EdgeInsets.all(16),
+                margin: const EdgeInsets.only(bottom: 16),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFF3E0),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: const Color(0xFFFF8C00)),
+                ),
+                child: const Row(
+                  children: [
+                    Icon(Icons.warning_amber_rounded, color: Color(0xFFFF8C00)),
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        'Вы уже сделали заказ сегодня. Можно заказывать только 1 раз в день.',
+                        style: TextStyle(color: Color(0xFFFF8C00)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+            // Place Order Button
+            SizedBox(
+              width: double.infinity,
+              height: 56,
+              child: ElevatedButton(
+                onPressed:
+                    (_isLoading || _hasOrderedToday) ? null : _placeOrder,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFFF8C00),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  disabledBackgroundColor: Colors.grey.shade300,
+                ),
+                child: _isLoading
+                    ? const SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : const Text(
+                        'Оформить заказ',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

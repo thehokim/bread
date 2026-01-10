@@ -6,9 +6,17 @@ abstract final class AppFonts {
 }
 
 abstract final class Assets {
-  static const String test = 'assets/images/test.png';
+  static const String onb1 = 'assets/icons/onb1.svg';
+  static const String onb2 = 'assets/icons/onb2.svg';
+  static const String onb3 = 'assets/icons/onb3.svg';
 }
 
 abstract final class Keys {
   static const String onboard = 'onboard';
+  static const String locale = 'locale';
+}
+
+abstract final class Locales {
+  static const String en = 'en';
+  static const String ru = 'ru';
 }
